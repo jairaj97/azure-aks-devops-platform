@@ -15,6 +15,7 @@ So far, I have:
 - Started and tested containers.
 - Configured the container to run as a non-root user.
 - Added `.dockerignore`, `.gitignore`, and `.gitattributes` files.
+- Created a feature branch and opened the first pull request on GitHub.
 
 ## What I learned
 
@@ -57,7 +58,6 @@ While starting the container, I missed the `run` command and used some flags inc
 
 ## Next steps
 
-- Publish the project to GitHub using a feature branch and pull request.
 - Push the Docker image to a container registry.
 - Deploy the application to a local Kubernetes cluster.
 - Add Kubernetes configuration, probes, secrets, and resource limits.
