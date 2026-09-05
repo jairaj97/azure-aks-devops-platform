@@ -1,0 +1,16 @@
+* text=auto
+
+Dockerfile text eol=lf
+.dockerignore text eol=lf
+*.cs text eol=lf
+*.csproj text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.sh text eol=lf
+*.tf text eol=lf
+*.tfvars text eol=lf
+
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
