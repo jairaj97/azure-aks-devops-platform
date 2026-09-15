@@ -1,0 +1,13 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- checkout: self
+
+- script: |
+   docker --version
+   docker build -t devops-demo:Latest .
+  displayName: "Build Docker Image"
