@@ -2,12 +2,22 @@ trigger:
 - main
 
 pool:
-  vmImage: "ubuntu-latest"
+  vmImage: 'ubuntu-latest'
+
+variables:
+  dockerRegSC: 'ACRAuth'
+  imageRepository: 'devops-demo'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  tag: '$(Build.BuildId)'
 
 steps:
-- checkout: self
-
-- script: |
-   docker --version
-   docker build -t devops-demo:Latest .
-  displayName: "Build Docker Image"
+- task: Docker@2
+  displayName: 'Build and Push Docker Image'
+  inputs:
+    command: 'buildAndPush'
+    containerRegistry: '$(dockerRegSC)'
+    repository: '$(imageRepository)'
+    dockerfile: '$(dockerfilePath)'
+    tags: |
+      $(tag)
+      latest
