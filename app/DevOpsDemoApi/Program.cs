@@ -1,7 +1,7 @@
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-app.MapGet("/", () => "DevOps Platform API is running");
+app.MapGet("/", () => "Hello from AKS - deployed automatically through Azure DevOps CI/CD!");
 
 app.MapGet("/health", () => Results.Ok(new { status = "healthy" }));
 
