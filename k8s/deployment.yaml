@@ -19,6 +19,6 @@ spec:
     spec:
       containers:
       - name: devops-demo
-        image: jaidevopsacr.azurecr.io/devops-demo:latest
+        image: jaidevopstflabacr.azurecr.io/devops-demo:latest
         ports:
         - containerPort: 8080

@@ -2,10 +2,10 @@ trigger:
 - main
 
 variables:
-  dockerRegSC: 'ACRAuth'
+  dockerRegSC: 'ACRAuthTF'
   azureSC: 'AzureSC'
   imageRepository: 'devops-demo'
-  containerRegistry: 'jaidevopsacr.azurecr.io'
+  containerRegistry: 'jaidevopstflabacr.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)'
 
