@@ -1,7 +1,7 @@
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello from AKS - deployed automatically through Azure DevOps CI/CDDevOps Demo - CI/CD v2
+app.MapGet("/", () => "Hello from AKS - deployed automatically through Azure DevOps CI/CD pipelinev2!");
 
 app.MapGet("/health", () => Results.Ok(new { status = "healthy" }));
 
