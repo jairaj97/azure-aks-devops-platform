@@ -19,7 +19,18 @@ stages:
       vmImage: 'ubuntu-latest'
     steps:
     - task: Docker@2
+      displayName: 'Validate Docker build without publishing'
+      condition: ne(variables['Build.SourceBranch'], 'refs/heads/main')
+      inputs:
+        command: 'build'
+        repository: '$(imageRepository)'
+        dockerfile: '$(dockerfilePath)'
+        tags: |
+          $(tag)
+
+    - task: Docker@2
       displayName: 'Build and Push Docker Image'
+      condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
       inputs:
         command: 'buildAndPush'
         containerRegistry: '$(dockerRegSC)'
