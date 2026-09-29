@@ -1,24 +1,51 @@
 apiVersion: apps/v1
 kind: Deployment
-
 metadata:
   name: devops-demo
-
 spec:
   replicas: 1
-
+  progressDeadlineSeconds: 180
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   selector:
     matchLabels:
       app: devops-demo
-
   template:
     metadata:
       labels:
         app: devops-demo
-
     spec:
       containers:
-      - name: devops-demo
-        image: jaidevopstflabacr.azurecr.io/devops-demo:latest
-        ports:
-        - containerPort: 8080
+        - name: devops-demo
+          # KubernetesManifest@1 replaces this tag with $(Build.BuildId).
+          image: jaidevopstflabacr.azurecr.io/devops-demo:latest
+          ports:
+            - name: http
+              containerPort: 8080
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 5
+            failureThreshold: 12
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 20
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
