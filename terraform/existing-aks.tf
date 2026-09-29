@@ -72,4 +72,10 @@ resource "azurerm_kubernetes_cluster" "existing_aks" {
     utc_offset  = "+00:00"
     start_date  = "2026-09-21T00:00:00Z"
   }
+
+  # An imported cluster can still differ from this configuration. A plan must
+  # be reviewed against live state before any changes are applied.
+  lifecycle {
+    prevent_destroy = true
+  }
 }
