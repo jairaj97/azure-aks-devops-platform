@@ -20,7 +20,7 @@ flowchart LR
 | `k8s/` | Deployment with probes/resources and a public LoadBalancer service |
 | `terraform/` | Terraform configuration for the lab resource group, ACR, pull role, and imported AKS cluster |
 
-The pipeline uses the `ACRAuthTF` registry connection and `AzureSC` Azure service connection. It builds `jaidevopstflabacr.azurecr.io/devops-demo:<Build.BuildId>` and also updates `:latest`. `KubernetesManifest@1` substitutes the Build ID image into the Deployment manifest, checks rollout stability, and the following step checks the deployment's image and calls the public `/health` endpoint. The manifest's `:latest` value is a substitution placeholder; deployment verification rejects `:latest` as the final image. A failed health check fails the pipeline.
+The pipeline uses the `ACRAuthTF` registry connection and `AzureSC` Azure service connection. It builds `jaidevopstflabacr.azurecr.io/devops-demo:<Build.BuildId>` and also updates `:latest`. Pull request validation builds the image; only a run from `main` deploys it. `KubernetesManifest@1` substitutes the Build ID image into the Deployment manifest, checks rollout stability, and the following step checks the deployment's image and calls the public `/health` endpoint. The manifest's `:latest` value is a substitution placeholder; deployment verification rejects `:latest` as the final image. A failed health check fails the pipeline.
 
 ## Run locally
 
