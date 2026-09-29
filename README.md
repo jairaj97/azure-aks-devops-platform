@@ -34,6 +34,10 @@ curl http://localhost:8080/health
 
 The API listens on port 8080. `/health` and `/ready` return simple success responses; they do not check external dependencies because this demo has none.
 
+## Verified result (29 September 2026)
+
+Azure DevOps main run `#20260929.7` (Build ID `18`) built and pushed `jaidevopstflabacr.azurecr.io/devops-demo:18`, rolled out the AKS Deployment, and received `{"status":"healthy"}` from the public `/health` endpoint. The PR validation run built successfully without publishing an image or deploying to AKS. These checks show the end-to-end CI/CD path working as of that run.
+
 ## Verify an Azure deployment
 
 After a successful pipeline run, its final step prints the deployed image and public health URL. From an authenticated Azure CLI session, you can also inspect the cluster directly:
@@ -52,7 +56,7 @@ Use the LoadBalancer `EXTERNAL-IP` from the last command at `http://<EXTERNAL-IP
 
 The lab resource group `rg-resource-tf-lab` and ACR `jaidevopstflabacr` were created with Terraform. A separate AKS creation attempt was blocked by Central India regional vCPU quota; the existing `jaidevopsaks` cluster in `rg-devops-e2e` was imported instead. Terraform state is local and excluded from Git, so a fresh checkout **does not** already manage the cluster.
 
-The imported AKS configuration has not yet been proven to produce a safe plan against live Azure state. `prevent_destroy` blocks replacement of the AKS resource, but it does not make proposed in-place changes safe or resolve differences between configuration and state. From the machine holding the imported state:
+On 29 September 2026, `terraform state list` showed the resource group, ACR, imported AKS cluster, and ACR pull role assignment. A refreshed `terraform plan` reported **No changes. Your infrastructure matches the configuration.** This confirms that the four managed resources matched the configuration at that point in time. `prevent_destroy` remains in place to block accidental AKS replacement. To check for future drift, run this from the machine holding the imported state:
 
 ```bash
 cd terraform
@@ -62,7 +66,7 @@ terraform plan -out=review.tfplan
 terraform show review.tfplan
 ```
 
-Review every AKS and node-pool difference, especially network settings, before applying any plan. Do not apply a plan that proposes cluster replacement. If using a fresh checkout, import the existing resources into that checkout's state deliberately before managing them; never commit state or credentials. The ACR pull role assignment also needs to be checked against live state to avoid a duplicate assignment.
+Review any future AKS and node-pool difference, especially network settings, before applying a plan. Do not apply a plan that proposes cluster replacement. If using a fresh checkout, import the existing resources into that checkout's state deliberately before managing them; never commit state or credentials. The ACR pull role assignment is already recorded in the original local state.
 
 ## Troubleshooting notes
 
@@ -73,4 +77,4 @@ Review every AKS and node-pool difference, especially network settings, before a
 
 ## Background
 
-I started this project to practise Docker, CI/CD, AKS, troubleshooting, and Terraform on a small application. Early mistakes with Docker `COPY`, build context, and command syntax helped clarify the difference between source files, images, and running containers. The remaining live proof is a successful pipeline run with its public health check and a reviewed, non-destructive Terraform plan.
+I started this project to practise Docker, CI/CD, AKS, troubleshooting, and Terraform on a small application. Early mistakes with Docker `COPY`, build context, and command syntax helped clarify the difference between source files, images, and running containers. The main pipeline run and a refreshed, zero-change Terraform plan now provide the live proof for the project.
